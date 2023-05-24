@@ -1,8 +1,6 @@
-package com.pk.flink.intro;
+package com.flink.intro;
 
-import com.pk.flink.bean.ClickLog;
-import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import com.flink.bean.ClickLog;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.Table;

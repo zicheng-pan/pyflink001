@@ -1,4 +1,4 @@
-package com.pk.flink.function;
+package com.flink.function;
 
 import org.apache.flink.table.annotation.DataTypeHint;
 import org.apache.flink.table.annotation.FunctionHint;

@@ -1,4 +1,4 @@
-package com.pk.flink.bean;
+package com.flink.bean;
 
 public class ClickLog {
 

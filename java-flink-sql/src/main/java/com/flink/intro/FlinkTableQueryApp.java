@@ -1,4 +1,4 @@
-package com.pk.flink.intro;
+package com.flink.intro;
 
 import org.apache.flink.table.api.*;
 
