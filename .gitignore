@@ -8,4 +8,4 @@ pk-flink.iml
 src/main/resources/.DS_Store
 .idea
 out*
-./pyflink-sql/lib
+./pyflink-sql/lib/
