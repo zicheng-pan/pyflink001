@@ -42,3 +42,5 @@ flink manage website on http://localhost:8081/ <br>
 ### 5. consume data from kafka topic
 ``bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --from-beginning --topic sink_topic``
 
+## PyFlink for KDA in AWS
+here is a [video](https://www.youtube.com/watch?v=00JgwB5vJps) supplying introduction and sample code running in AWS Kinesis Analytics.  
