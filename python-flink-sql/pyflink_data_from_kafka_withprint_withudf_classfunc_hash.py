@@ -13,8 +13,7 @@ class HashCode(ScalarFunction):
 settings = EnvironmentSettings.in_batch_mode()
 table_env = TableEnvironment.create(settings)
 
-hash_code = udf(HashCode(), result_type=DataTypes.BIGINT())
-
+#{"a": "testabc adsfadsf", "b": 123}
 def log_processing():
     # create a streaming TableEnvironment
     config = Configuration()
