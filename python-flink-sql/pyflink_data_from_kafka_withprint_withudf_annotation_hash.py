@@ -3,16 +3,13 @@ from pyflink.table import TableEnvironment, EnvironmentSettings, DataTypes
 from pyflink.table.udf import ScalarFunction, udf
 
 
-class HashCode(ScalarFunction):
-  def __init__(self):
-    self.factor = 12
-
-  def eval(self, s):
-    return hash(s) * self.factor
+@udf(result_type=DataTypes.STRING())
+def uppercase(self, s):
+    return s.upper()
 
 settings = EnvironmentSettings.in_batch_mode()
 table_env = TableEnvironment.create(settings)
-table_env.create_temporary_function("hash_code", udf(HashCode(), result_type=DataTypes.BIGINT()))
+table_env.create_temporary_function("uppercase", eval)
 
 #{"a": "testabc adsfadsf", "b": 123}
 def log_processing():
@@ -60,7 +57,7 @@ def log_processing():
 
     # 添加用于展示的数据
     insert_print = """
-        insert into print_table_udf select hash_code(a) as a from source_table
+        insert into print_table_udf select uppercase(a) as a from source_table
     """
     t_env.execute_sql(insert_print)
 
