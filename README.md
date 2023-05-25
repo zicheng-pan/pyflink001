@@ -23,6 +23,10 @@ Apache Flink has multiple options from where it can Read/Write data. Below is a 
 ## Relation between JobManager & TaskManager
 ![img.png](readmeimg/jobmanagerandtaskmanager.png)
 
+## Slot in TaskManager
+![img.png](readmeimg/slot_sharing.svg)
+
+
 ## Platform environment
 make sure installed the applications below before running this project <br>
 <b>1. [kafka.](https://kafka.apache.org/downloads) <br></b>
