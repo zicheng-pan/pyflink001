@@ -1,19 +1,37 @@
+from pyflink.common import Configuration
 from pyflink.table import TableEnvironment, EnvironmentSettings, DataTypes
-from pyflink.table.udf import udf
+from pyflink.table.udf import ScalarFunction, udf
 
-@udf(input_types=DataTypes.STRING(), result_type=DataTypes.STRING())
-def uppercase(charac):
-    return str(charac).upper()
 
+class HashCode(ScalarFunction):
+  def __init__(self):
+    self.factor = 12
+
+  def eval(self, s):
+    return hash(s) * self.factor
+
+settings = EnvironmentSettings.in_batch_mode()
+table_env = TableEnvironment.create(settings)
+
+hash_code = udf(HashCode(), result_type=DataTypes.BIGINT())
 
 def log_processing():
-    env_settings = EnvironmentSettings.in_streaming_mode()
+    # create a streaming TableEnvironment
+    config = Configuration()
+    config.set_string("python.fn-execution.bundle.size", "1000")
+    env_settings = EnvironmentSettings \
+        .new_instance() \
+        .in_streaming_mode() \
+        .with_configuration(config) \
+        .build()
     t_env = TableEnvironment.create(env_settings)
 
     t_env.get_config().set("pipeline.jars",
                            "file:///Users/zpan2/PycharmProjects/pyflink/PythonApplicationDependencies.jar")
 
-    t_env.create_temporary_system_function("uppercase", uppercase)
+    table_env.create_temporary_function("hash_code", udf(HashCode(), result_type=DataTypes.BIGINT()))
+    # t_env.execute_sql("create temporary system function PY_UPPER as 'my_udfs.py_upper' language python")
+
     # {"a":"abc","b":123}
     source_ddl = """
             CREATE TABLE IF NOT EXISTS source_table(
@@ -44,8 +62,8 @@ def log_processing():
     t_env.execute_sql(sink_ddl)
 
     create_print = """
-        CREATE TABLE IF NOT EXISTS print_table (
-            a VARCHAR
+        CREATE TABLE IF NOT EXISTS print_table_udf (
+            a INT
         ) WITH (
           'connector' = 'print'
         );
@@ -53,22 +71,11 @@ def log_processing():
     # 创建用于展示的临时表/视图
     t_env.execute_sql(create_print)
 
-
     # 添加用于展示的数据
     insert_print = """
-        insert into print_table select uppercase(a) as a from source_table
+        insert into print_table_udf select hash_code(a) as a from source_table
     """
-
-    statement_set = t_env.create_statement_set()
-
-    statement_set.add_insert_sql(insert_print)
-
-    #{"a": "abc adsfadsf", "b": 123}
-    # 处理真正的任务
-    # statement_set.add_insert_sql("insert into sink_table SELECT a FROM source_table")
-
-    statement_set.execute()
-
+    t_env.execute_sql(insert_print)
 
 
 if __name__ == '__main__':
