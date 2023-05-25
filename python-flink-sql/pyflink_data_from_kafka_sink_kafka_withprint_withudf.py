@@ -1,5 +1,10 @@
-from pyflink.table import TableEnvironment, EnvironmentSettings
+from pyflink.table import TableEnvironment, EnvironmentSettings, DataTypes
 from pyflink.table.udf import udf
+
+@udf(input_types=DataTypes.STRING(), result_type=DataTypes.STRING())
+def uppercase(charac):
+    return str(charac).upper()
+
 
 def log_processing():
     env_settings = EnvironmentSettings.in_streaming_mode()
@@ -8,6 +13,7 @@ def log_processing():
     t_env.get_config().set("pipeline.jars",
                            "file:///Users/zpan2/PycharmProjects/pyflink/PythonApplicationDependencies.jar")
 
+    t_env.create_temporary_system_function("uppercase", uppercase)
     # {"a":"abc","b":123}
     source_ddl = """
             CREATE TABLE IF NOT EXISTS source_table(
@@ -50,17 +56,16 @@ def log_processing():
 
     # 添加用于展示的数据
     insert_print = """
-        insert into print_table select a from source_table
+        insert into print_table select uppercase(a) as a from source_table
     """
 
     statement_set = t_env.create_statement_set()
 
     statement_set.add_insert_sql(insert_print)
 
-
-
+    #{"a": "abc adsfadsf", "b": 123}
     # 处理真正的任务
-    statement_set.add_insert_sql("insert into sink_table SELECT a FROM source_table")
+    # statement_set.add_insert_sql("insert into sink_table SELECT a FROM source_table")
 
     statement_set.execute()
 

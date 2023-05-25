@@ -25,7 +25,7 @@ make sure installed the applications below before running this project <br>
 <b>1. [kafka.](https://kafka.apache.org/downloads) <br></b>
 <b>2. [flink.](https://www.apache.org/dyn/closer.lua/flink/flink-1.17.0/flink-1.17.0-bin-scala_2.12.tgz)</b> If submitting job on flink locally, make sure you cloud open the 
 flink manage website on http://localhost:8081/ <br>
-<b>3. if run python job on flink please install flink in python intepretor by ``python -m pip install apache-flink==1.13.6`` </b>
+<b>3. if run python job on flink please install flink in python intepretor by ``python -m pip install apache-flink`` </b>
 
 
 ## Kafka topic operation
@@ -38,7 +38,7 @@ flink manage website on http://localhost:8081/ <br>
 ### 3. create a kafka topic
 ``bin/kafka-topics.sh --bootstrap-server localhost:9092 --partitions 2 --create --topic template001``
 ### 4. produce data to kafka topic
-``bin/kafka-console-producer.sh --tstrap-server localhost:9092 --topic source_topic --producer.config config/producer.properties``
+``bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic source_topic --producer.config config/producer.properties``
 ### 5. consume data from kafka topic
 ``bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --from-beginning --topic sink_topic``
 
