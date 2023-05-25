@@ -20,6 +20,9 @@ Apache Flink has multiple options from where it can Read/Write data. Below is a 
 ## Generally Flink job component
 ![img.png](readmeimg/flinkcodeprocess.png)
 
+## Relation between JobManager & TaskManager
+![img.png](readmeimg/jobmanagerandtaskmanager.png)
+
 ## Platform environment
 make sure installed the applications below before running this project <br>
 <b>1. [kafka.](https://kafka.apache.org/downloads) <br></b>
