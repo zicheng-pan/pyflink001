@@ -7,14 +7,14 @@ this project is for flink sql demo.
 ## [Storage](https://nightlies.apache.org/flink/flink-docs-master/docs/connectors/table/overview/) 
 Apache Flink has multiple options from where it can Read/Write data. Below is a basic storage list −
 <ol>
-<li>HDFS (Hadoop Distributed File System)</li>
-<li>HLocal File System</li>
-<li>HS3</li>
-<li>HRDBMS (MySQL, Oracle, MS SQL etc.)</li>
-<li>HMongoDB</li>
-<li>HHBase</li>
-<li>HApache Kafka</li>
-<li>HApache Flume</li>
+<li>DFS (Hadoop Distributed File System)</li>
+<li>Local File System</li>
+<li>S3</li>
+<li>RDBMS (MySQL, Oracle, MS SQL etc.)</li>
+<li>MongoDB</li>
+<li>HBase</li>
+<li>Apache Kafka</li>
+<li>Apache Flume</li>
 </ol>
 
 ## Generally Flink job component
