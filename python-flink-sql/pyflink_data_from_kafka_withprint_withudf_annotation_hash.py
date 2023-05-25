@@ -1,32 +1,31 @@
 from pyflink.common import Configuration
 from pyflink.table import TableEnvironment, EnvironmentSettings, DataTypes
-from pyflink.table.udf import ScalarFunction, udf
+from pyflink.table.udf import udf
 
 
-@udf(result_type=DataTypes.STRING())
-def uppercase(self, s):
-    return s.upper()
+# {"a": "testabc adsfadsf", "b": 123}
 
-settings = EnvironmentSettings.in_batch_mode()
-table_env = TableEnvironment.create(settings)
-table_env.create_temporary_function("uppercase", eval)
-
-#{"a": "testabc adsfadsf", "b": 123}
+#TODO not finished
 def log_processing():
     # create a streaming TableEnvironment
     config = Configuration()
     config.set_string("python.fn-execution.bundle.size", "1000")
     env_settings = EnvironmentSettings \
         .new_instance() \
-        .in_streaming_mode() \
         .with_configuration(config) \
         .build()
     t_env = TableEnvironment.create(env_settings)
+    t_env.get_config().get_configuration().set_string('parallelism.default', '1')
 
     t_env.get_config().set("pipeline.jars",
                            "file:///Users/zpan2/PycharmProjects/pyflink/PythonApplicationDependencies.jar")
 
+    # t_env.set_python_requirements("/Users/zpan2/project/mine/pyflink001/python-flink-sql/udf/my_udfs.py")
     # t_env.execute_sql("create temporary system function PY_UPPER as 'my_udfs.py_upper' language python")
+    t_env.create_temporary_function("aaa",
+                                    udf(lambda s: s.upper(),
+                                        input_types=[DataTypes.STRING()],
+                                        result_type=DataTypes.STRING()))
 
     # {"a":"abc","b":123}
     source_ddl = """
@@ -47,7 +46,7 @@ def log_processing():
 
     create_print = """
         CREATE TABLE IF NOT EXISTS print_table_udf (
-            a INT
+            a string
         ) WITH (
           'connector' = 'print'
         );
@@ -57,7 +56,7 @@ def log_processing():
 
     # 添加用于展示的数据
     insert_print = """
-        insert into print_table_udf select uppercase(a) as a from source_table
+        insert into print_table_udf select aaa(a) as a from source_table
     """
     t_env.execute_sql(insert_print)
 
