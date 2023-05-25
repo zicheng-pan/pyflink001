@@ -1,5 +1,6 @@
 from pyflink.table import DataTypes, EnvironmentSettings, TableEnvironment
 from pyflink.table.udf import udf
+from myudf import myrawudf
 
 env_settings = EnvironmentSettings.new_instance().in_batch_mode().build()
 t_env = TableEnvironment.create(environment_settings=env_settings)
@@ -11,9 +12,13 @@ t_env.get_config().set("pipeline.jars",
 
 # upper = udf(lambda i:i.upper(), [DataTypes.STRING()], DataTypes.STRING())
 
-@udf(input_types=[DataTypes.STRING()], result_type=DataTypes.STRING())
-def upper(x):
-    return x.upper()
+# @udf(input_types=[DataTypes.STRING()], result_type=DataTypes.STRING())
+# def upper(x):
+#     return x.upper()
+
+# @myrawudf.myudf
+# def upper(x):
+#     return x.upper()
 
 
 t_env.execute_sql("""
